@@ -13,6 +13,7 @@ if __name__ == '__main__':
     
     if cpf and especialidade:
         if st.button('Executar'):
+            df = None
             with st.expander('Resultados'):
                 app = RobotClass('24868971867', especialidade)
                 app.acessa()

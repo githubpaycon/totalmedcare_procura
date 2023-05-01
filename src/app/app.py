@@ -18,6 +18,7 @@ class RobotClass(Bot):
             'BAIRRO': [],
             'CEP': [],
             'TELEFONES': [],
+            'ESPECIALIDADE': [],
         }
         
     def acessa(self):
@@ -62,6 +63,7 @@ class RobotClass(Bot):
                 self.DF_TEMPLATE['BAIRRO'].append(bairro)
                 self.DF_TEMPLATE['CEP'].append(cep)
                 self.DF_TEMPLATE['TELEFONES'].append(telefones)
+                self.DF_TEMPLATE['ESPECIALIDADE'].append(self.ESPECIALIDADE)
 
             else:
                 try:
