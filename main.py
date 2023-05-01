@@ -15,10 +15,13 @@ if __name__ == '__main__':
         if st.button('Executar'):
             df = None
             with st.expander('Resultados'):
-                app = RobotClass('24868971867', especialidade)
-                app.acessa()
-                app.preenche_especialidade()
-                df = app.extrai_infos()
+                try:
+                    app = RobotClass('24868971867', especialidade)
+                    app.acessa()
+                    app.preenche_especialidade()
+                    df = app.extrai_infos()
+                except Exception as e:
+                    st.exception(e)
             st.balloons()
             df = pd.DataFrame(df)
             st.dataframe(df)
