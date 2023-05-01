@@ -6,6 +6,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import *
+from webdriver_manager.core.utils import ChromeType
 from webdriver_manager.chrome import ChromeDriverManager
 from funcsforspo_l.fpython.functions_for_py import *
 from funcsforspo_l.fselenium.functions_selenium import *
@@ -83,7 +84,11 @@ class Bot:
         self.__service = Service(ChromeDriverManager().install())
         
         # create DRIVER
-        self.DRIVER = Chrome(service=self.__service, options=self._options)
+        try:
+            self.DRIVER = Chrome(service=self.__service, options=self._options)
+        except WebDriverException:
+            self.__service = Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
+            self.DRIVER = Chrome(service=self.__service, options=self._options)
         
         def enable_download_in_headless_chrome(driver, download_dir):
             '''
