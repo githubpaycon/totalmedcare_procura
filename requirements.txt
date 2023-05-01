@@ -1,0 +1,5 @@
+funcsforspo-l
+pandas
+selenium
+streamlit
+webdriver-manager
