@@ -36,40 +36,48 @@ class RobotClass(Bot):
     #         json.dump(json_lista, f)
     
     def preenche_especialidade(self):
-        faz_log_st(f'Preenchendo especialidade {self.ESPECIALIDADE}')
-        select = espera_elemento(self.WDW, (By.CSS_SELECTOR, '#ctl00_ContentPlaceHolder1_ddlEspec'))
-        select = Select(select)
-        select.select_by_visible_text(text=self.ESPECIALIDADE)
-        espera_elemento_disponivel_e_clica(self.WDW, (By.CSS_SELECTOR, 'input[value="Buscar"]'))
+        try:
+            faz_log_st(f'Preenchendo especialidade {self.ESPECIALIDADE}')
+            select = espera_elemento(self.WDW, (By.CSS_SELECTOR, '#ctl00_ContentPlaceHolder1_ddlEspec'))
+            select = Select(select)
+            select.select_by_visible_text(text=self.ESPECIALIDADE)
+            espera_elemento_disponivel_e_clica(self.WDW, (By.CSS_SELECTOR, 'input[value="Buscar"]'))
+        except Exception as e:
+            self.DRIVER.close()
+            st.exception(e)
 
     def extrai_infos(self):
-        qtd_extraida = 0
-        qtd = espera_e_retorna_elemento_text(self.WDW, (By.CSS_SELECTOR, '#ctl00_ContentPlaceHolder1_lblReg'))
-        while True:
-            if qtd == qtd_extraida:
-                self.DRIVER.close()
-                return self.DF_TEMPLATE
-            registros = espera_e_retorna_lista_de_elementos(self.WDW10, (By.CSS_SELECTOR, '#PainelCredenciados>span>span .BlocoResultado'))
-            for i, registro in enumerate(registros):
-                faz_log_st(f'Recuperando registro {i} de {qtd}')
-                nome_local = registro.find_element(By.CSS_SELECTOR, '.LabelTitulo').text
-                endereco = registro.find_element(By.CSS_SELECTOR, 'span[id*="lblEnd"]').text
-                bairro = registro.find_element(By.CSS_SELECTOR, 'span[id*="lblBairro"]').text
-                cep = registro.find_element(By.CSS_SELECTOR, 'span[id*="lblCEP"]').text
-                telefones = registro.find_element(By.CSS_SELECTOR, 'span[id*="lbltelefones"]').text.replace('(11) ', '').replace(' ', '')
-
-                self.DF_TEMPLATE['NOME DO LOCAL'].append(nome_local)
-                self.DF_TEMPLATE['ENDERECO'].append(endereco)
-                self.DF_TEMPLATE['BAIRRO'].append(bairro)
-                self.DF_TEMPLATE['CEP'].append(cep)
-                self.DF_TEMPLATE['TELEFONES'].append(telefones)
-                self.DF_TEMPLATE['ESPECIALIDADE'].append(self.ESPECIALIDADE)
-
-            else:
-                try:
-                    espera_elemento_disponivel_e_clica(self.WDW3, (By.CSS_SELECTOR, '#ctl00_ContentPlaceHolder1_cmdNext'))
-                except:
+        try:
+            qtd_extraida = 0
+            qtd = espera_e_retorna_elemento_text(self.WDW, (By.CSS_SELECTOR, '#ctl00_ContentPlaceHolder1_lblReg'))
+            while True:
+                if qtd == qtd_extraida:
                     self.DRIVER.close()
                     return self.DF_TEMPLATE
+                registros = espera_e_retorna_lista_de_elementos(self.WDW10, (By.CSS_SELECTOR, '#PainelCredenciados>span>span .BlocoResultado'))
+                for i, registro in enumerate(registros):
+                    faz_log_st(f'Recuperando registro {i} de {qtd}')
+                    nome_local = registro.find_element(By.CSS_SELECTOR, '.LabelTitulo').text
+                    endereco = registro.find_element(By.CSS_SELECTOR, 'span[id*="lblEnd"]').text
+                    bairro = registro.find_element(By.CSS_SELECTOR, 'span[id*="lblBairro"]').text
+                    cep = registro.find_element(By.CSS_SELECTOR, 'span[id*="lblCEP"]').text
+                    telefones = registro.find_element(By.CSS_SELECTOR, 'span[id*="lbltelefones"]').text.replace('(11) ', '').replace(' ', '')
+
+                    self.DF_TEMPLATE['NOME DO LOCAL'].append(nome_local)
+                    self.DF_TEMPLATE['ENDERECO'].append(endereco)
+                    self.DF_TEMPLATE['BAIRRO'].append(bairro)
+                    self.DF_TEMPLATE['CEP'].append(cep)
+                    self.DF_TEMPLATE['TELEFONES'].append(telefones)
+                    self.DF_TEMPLATE['ESPECIALIDADE'].append(self.ESPECIALIDADE)
+
+                else:
+                    try:
+                        espera_elemento_disponivel_e_clica(self.WDW3, (By.CSS_SELECTOR, '#ctl00_ContentPlaceHolder1_cmdNext'))
+                    except:
+                        self.DRIVER.close()
+                        return self.DF_TEMPLATE
+        except Exception as e:
+            self.DRIVER.close()
+            st.exception(e)
         
         
