@@ -5,7 +5,7 @@ from selenium.webdriver.support.ui import Select
 class RobotClass(Bot):
     def __init__(self, cpf, especialidade) -> None:
         self.configs = read_json(CONFIG_PATH)
-        self.HEADLESS = False
+        self.HEADLESS = True
         self.DOWNLOAD_FILES = False
         self.URL = 'https://redecredenciada-tmc.sdasystems.org/Busca/Cliente.aspx'
         self.CPF = cpf
